@@ -1,0 +1,55 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+
+<th:block layout:fragment="pagetitle">
+    <!--page title-->
+    <div th:replace="partials/title-meta :: title-meta('Hammer')"></div>
+</th:block>
+
+<head>
+
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div th:replace="partials/page-title :: page-title('敲垂統計','-')"></div>
+    <div class="row">
+        <div class="col-xl-9 col-lg-8">
+            <div class="row" id="hammersInfo">
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-4">
+            <div class="card" style="height:550px">
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-outline-primary btn-load" onclick="addHammerList()">
+                                <span class="d-flex align-items-center">
+                                    <i class="ri-add-circle-fill"></i>
+                                    <span class="flex-grow-1 ms-2">新增項目</span>
+                                </span>
+                        </button>
+                        <button class="btn btn-outline-primary btn-load">
+                                <span class="d-flex align-items-center">
+                                    <i class="ri-checkbox-circle-fill"></i>
+                                    <span class="flex-grow-1 ms-2">產出報告</span>
+                                </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="modal">
+
+</th:block>
+<th:block layout:fragment="pagejs">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/assets/pages/hammer/hammer.js"></script>
+
+</th:block>
+</body>
+
+</html>
