@@ -13,4 +13,6 @@ public class HammerInfo {
     private String name;
     private Integer price;
     private ArrayList tags;
+    private Boolean show;
+    private String id;
 }
