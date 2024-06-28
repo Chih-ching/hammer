@@ -58,16 +58,41 @@ let delList = async function (id) {
         for (let i = 0; i < $(".hammers").length; i++) {
             let element = $('.hammers').eq(i).find('.card');
             element.find('.card-title').text('# ' + [i + 1]);
-            let target=allData.filter(data => {return data.id===element.attr('id')});
+            let target = allData.filter(data => {
+                return data.id === element.attr('id')
+            });
             new Choices($('.tagInput')[i], {
                 removeItemButton: true,
-
             }).setValue(target[0].accountList);
         }
     })
 }
 
+let batchAddTargetId='';
 let batchAdd = function (id) {
-    alert("batchAdd: " + id)
+    $('#acccountList').val('');
+    $('#batchAddModal').modal({backdrop: 'static', keyboard: false});
+    $('#batchAddModal').modal('show');
+    batchAddTargetId=id;
 }
 
+let batchAddModalSubmit = function () {
+    let id='#'+batchAddTargetId;
+    let tagArr = [];
+    $(id).find('.choices__item--selectable').each(function () {
+        tagArr.push($(this).attr('data-value'));
+    });
+    let accountList=$('#acccountList').val();
+    accountList.split(/\s+/).forEach(account=> {
+        if (account.trim() !== '') {
+            tagArr.push(account.trim());
+        }
+    })
+    $(id).find('.choices').remove();
+    $(id).find('.accountDiv').append('<input type="text" class="tagInput">');
+    new Choices($(id).find('.tagInput')[0], {
+        removeItemButton: true,
+    }).setValue(tagArr);
+    $('#batchAddModal').modal('hide');
+
+}

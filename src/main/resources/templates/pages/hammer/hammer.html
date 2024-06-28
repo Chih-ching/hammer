@@ -43,6 +43,35 @@
 </div>
 
 <th:block layout:fragment="modal">
+    <!-- 批次新增modal -->
+    <div class="modal fade" id="batchAddModal" tabindex="-1" aria-labelledby="exampleModalgridLabel" aria-modal="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalgridLabel">批次新增</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="javascript:void(0);">
+                        <div class="row g-3">
+                            <div class="col-xxl-12">
+                                <div>
+                                    <label for="acccountList" class="form-label">帳號清單</label>
+                                    <textarea type="text" class="form-control" rows="20" id="acccountList" placeholder="請輸入..."></textarea>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-lg-12">
+                                <div class="hstack gap-2 justify-content-end">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" onclick="batchAddModalSubmit()">Submit</button>
+                                </div>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </th:block>
 <th:block layout:fragment="pagejs">
