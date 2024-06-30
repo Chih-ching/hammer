@@ -22,11 +22,18 @@
         <div class="col-xl-3 col-lg-4">
             <div class="card" style="height:550px">
                 <div class="card-body">
+                    <div><p class="text-muted mb-3 mt-3">item : <span id="cardNum" class="fw-medium">0</span></p></div>
                     <div class="d-grid gap-2">
                         <button class="btn btn-outline-primary btn-load" onclick="addHammerList()">
                                 <span class="d-flex align-items-center">
                                     <i class="ri-add-circle-fill"></i>
                                     <span class="flex-grow-1 ms-2">新增項目</span>
+                                </span>
+                        </button>
+                        <button class="btn btn-outline-primary btn-load" onclick="quickaddHammerList()">
+                                <span class="d-flex align-items-center">
+                                    <i class="ri-flashlight-fill"></i>
+                                    <span class="flex-grow-1 ms-2">批次新增</span>
                                 </span>
                         </button>
                         <button class="btn btn-outline-primary btn-load">

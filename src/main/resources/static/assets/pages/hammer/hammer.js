@@ -16,10 +16,11 @@ let addHammerList = async function () {
     allData.push(newInfo);
     await thymeleafPage("/hammerList", [newInfo]).then(res => {
         $('#hammersInfo').append(res);
-        new Choices($('.tagInput')[$(".hammers").length - 1], {
-            removeItemButton: true,
-        });
+        // new Choices($('.tagInput')[$(".hammers").length - 1], {
+        //     removeItemButton: true,
+        // });
         $('.hammers').last().find('.card-title').text('# ' + $(".hammers").length);
+        $('#cardNum').text($(".hammers").length);
     })
 
 }
@@ -62,15 +63,24 @@ let delList = async function (id) {
                 return data.id === element.attr('id')
             });
             new Choices($('.tagInput')[i], {
-                removeItemButton: true,
-            }).setValue(target[0].accountList);
+            }).setValue(target[0].accountList).disable();
         }
+    }).finally(()=>{
+        $('#cardNum').text($(".hammers").length);
     })
 }
 
 let batchAddTargetId='';
 let batchAdd = function (id) {
-    $('#acccountList').val('');
+    updateAllData();
+    let tagArr=[];
+    allData.forEach(data => {
+        if (data.id === id) {
+            tagArr=data.accountList;
+        }
+    });
+    let tagWord=tagArr.join("\n");
+    $('#acccountList').val(tagWord);
     $('#batchAddModal').modal({backdrop: 'static', keyboard: false});
     $('#batchAddModal').modal('show');
     batchAddTargetId=id;
@@ -79,20 +89,17 @@ let batchAdd = function (id) {
 let batchAddModalSubmit = function () {
     let id='#'+batchAddTargetId;
     let tagArr = [];
-    $(id).find('.choices__item--selectable').each(function () {
-        tagArr.push($(this).attr('data-value'));
-    });
     let accountList=$('#acccountList').val();
     accountList.split(/\s+/).forEach(account=> {
         if (account.trim() !== '') {
             tagArr.push(account.trim());
         }
     })
-    $(id).find('.choices').remove();
-    $(id).find('.accountDiv').append('<input type="text" class="tagInput">');
+    $(id).find('.tagBlock').empty();
+    $(id).find('.tagBlock').append('<input type="text" class="form-control tagInput">');
     new Choices($(id).find('.tagInput')[0], {
-        removeItemButton: true,
-    }).setValue(tagArr);
+    }).setValue(tagArr).disable();
+    $(id).find('.accountDiv .badge').text(tagArr.length);
     $('#batchAddModal').modal('hide');
 
 }

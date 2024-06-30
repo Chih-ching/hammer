@@ -26,11 +26,11 @@
             </div>
             <div class="mt-3 accountDiv">
                 <label class="form-label">帳號</label>
-                <span class="badge rounded-pill border border-light text-body">0</span>
-                <input type="text" class="tagInput">
+                <span class="badge rounded-pill bg-light-subtle text-body">0</span>
+                <div class="tagBlock"><input type="text" class="form-control tagInput" disabled></div>
             </div>
             <div class="mt-1">
-                <span class="badge bg-light text-body" th:onclick="batchAdd([[${hammer.id}]])">批次新增</span>
+                <span class="badge bg-light text-body" th:onclick="batchAdd([[${hammer.id}]])">編輯標籤</span>
             </div>
         </div>
     </div>
