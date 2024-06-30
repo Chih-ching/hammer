@@ -11,14 +11,18 @@ function hammerModel(name, price, accountList, show, id) {
 }
 
 let allData = [];
-let addHammerList = async function () {
-    let newInfo = new hammerModel("", 0, [], true, 'hammer' + parseInt(allData.length + 1));
-    allData.push(newInfo);
-    await thymeleafPage("/hammerList", [newInfo]).then(res => {
+let addHammerButton = function () {
+    addHammerList([new hammerModel("", 0, [], true, 'hammer' + parseInt(allData.length + 1))])
+        .then(r => {
+        })
+        .catch(e => {
+            alert("error")
+        });
+}
+let addHammerList = async function (dataArr) {//單筆
+    allData = allData.concat(dataArr);
+    await thymeleafPage("/hammerList", dataArr).then(res => {
         $('#hammersInfo').append(res);
-        // new Choices($('.tagInput')[$(".hammers").length - 1], {
-        //     removeItemButton: true,
-        // });
         $('.hammers').last().find('.card-title').text('# ' + $(".hammers").length);
         $('#cardNum').text($(".hammers").length);
     })
@@ -53,7 +57,11 @@ let delList = async function (id) {
             data.show = false;
         }
     })
-    $('#hammersInfo').empty();
+    addHammerLists();
+
+}
+let addHammerLists = async function () { //多筆
+    $('#hammersInfo').empty(); //清空所有清單
     await thymeleafPage("/hammerList", allData).then(res => {
         $('#hammersInfo').append(res);
         for (let i = 0; i < $(".hammers").length; i++) {
@@ -62,44 +70,83 @@ let delList = async function (id) {
             let target = allData.filter(data => {
                 return data.id === element.attr('id')
             });
-            new Choices($('.tagInput')[i], {
-            }).setValue(target[0].accountList).disable();
+            new Choices($('.tagInput')[i], {}).setValue(target[0].accountList).disable();
+            element.find('.accountDiv .badge').text(target[0].accountList.length);
         }
-    }).finally(()=>{
+    }).finally(() => {
         $('#cardNum').text($(".hammers").length);
     })
 }
 
-let batchAddTargetId='';
+let batchAddTargetId = '';
 let batchAdd = function (id) {
     updateAllData();
-    let tagArr=[];
+    let tagArr = [];
     allData.forEach(data => {
         if (data.id === id) {
-            tagArr=data.accountList;
+            tagArr = data.accountList;
         }
     });
-    let tagWord=tagArr.join("\n");
+    let tagWord = tagArr.join("\n");
     $('#acccountList').val(tagWord);
     $('#batchAddModal').modal({backdrop: 'static', keyboard: false});
     $('#batchAddModal').modal('show');
-    batchAddTargetId=id;
+    batchAddTargetId = id;
 }
 
 let batchAddModalSubmit = function () {
-    let id='#'+batchAddTargetId;
+    let id = '#' + batchAddTargetId;
     let tagArr = [];
-    let accountList=$('#acccountList').val();
-    accountList.split(/\s+/).forEach(account=> {
+    let accountList = $('#acccountList').val();
+    accountList.split(/\s+/).forEach(account => {
         if (account.trim() !== '') {
             tagArr.push(account.trim());
         }
     })
     $(id).find('.tagBlock').empty();
     $(id).find('.tagBlock').append('<input type="text" class="form-control tagInput">');
-    new Choices($(id).find('.tagInput')[0], {
-    }).setValue(tagArr).disable();
+    new Choices($(id).find('.tagInput')[0], {}).setValue(tagArr).disable();
     $(id).find('.accountDiv .badge').text(tagArr.length);
     $('#batchAddModal').modal('hide');
 
+}
+
+let quickAddHammerList = function () {
+    $('#quickAddContent').val('');
+    $('#quickAddModal').modal({backdrop: 'static', keyboard: false});
+    $('#quickAddModal').modal('show');
+}
+
+let quickAddModalSubmit = function () {
+    updateAllData();
+    try {
+        let modalDataArr = [];
+        if (!$('#quickAddContent').val().startsWith('#')) throw "Exception";
+        $('#quickAddContent').val().split('#').forEach((infos, i) => {
+            if (i > 0) {
+                let name = '';
+                let price = 0;
+                let tagArr = [];
+                infos.split(/\s+/).forEach((info, idx) => {
+                    if (idx == 0) name = info.trim();
+                    if (idx == 1) {
+                        if(!info.startsWith('$'))throw "Exception";
+                        if(isNaN(Number(info.substr(1).trim())))throw "Exception";
+                        price = parseInt(info.substr(1).trim());
+                    }
+                    if (idx > 1 && info.trim() != '') tagArr.push(info.trim());
+                });
+                modalDataArr.push(new hammerModel(name, price, tagArr, true, 'hammer' + parseInt(allData.length + i)))
+            }
+        });
+        allData = allData.concat(modalDataArr);
+        console.log(allData);
+        addHammerLists().then(res=>{
+            $('#quickAddModal').modal('hide');
+        }).catch(e => {
+            alert('錯誤！');
+        });
+    } catch (e) {
+        alert('解析錯誤！');
+    }
 }

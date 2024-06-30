@@ -24,13 +24,13 @@
                 <div class="card-body">
                     <div><p class="text-muted mb-3 mt-3">item : <span id="cardNum" class="fw-medium">0</span></p></div>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-outline-primary btn-load" onclick="addHammerList()">
+                        <button class="btn btn-outline-primary btn-load" onclick="addHammerButton()">
                                 <span class="d-flex align-items-center">
                                     <i class="ri-add-circle-fill"></i>
                                     <span class="flex-grow-1 ms-2">新增項目</span>
                                 </span>
                         </button>
-                        <button class="btn btn-outline-primary btn-load" onclick="quickaddHammerList()">
+                        <button class="btn btn-outline-primary btn-load" onclick="quickAddHammerList()">
                                 <span class="d-flex align-items-center">
                                     <i class="ri-flashlight-fill"></i>
                                     <span class="flex-grow-1 ms-2">批次新增</span>
@@ -55,7 +55,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalgridLabel">批次新增</h5>
+                    <h5 class="modal-title" >批次新增</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -71,6 +71,36 @@
                                 <div class="hstack gap-2 justify-content-end">
                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
                                     <button type="submit" class="btn btn-primary" onclick="batchAddModalSubmit()">Submit</button>
+                                </div>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 快速新增modal -->
+    <div class="modal fade" id="quickAddModal" tabindex="-1" aria-labelledby="exampleModalgridLabel" aria-modal="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">批次新增</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="javascript:void(0);">
+                        <div class="row g-3">
+                            <div class="col-xxl-12">
+                                <div>
+                                    <label for="quickAddContent" class="form-label">帳號清單</label>
+<!--                                    <div><span id='quickAddErrorMsg' class="badge bg-danger-subtle text-danger"></span></div>-->
+                                    <textarea type="text" class="form-control" rows="20" id="quickAddContent" placeholder="請輸入..."></textarea>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-lg-12">
+                                <div class="hstack gap-2 justify-content-end">
+                                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" onclick="quickAddModalSubmit()">Submit</button>
                                 </div>
                             </div><!--end col-->
                         </div><!--end row-->
