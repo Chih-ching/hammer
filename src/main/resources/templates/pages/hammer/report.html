@@ -16,8 +16,7 @@
         <tr th:each="info,idx2 : ${entry.value}">
             <th scope="row" th:text="${idx1.count}" th:rowspan="${entry.value.size()}" th:if="${idx2.count} eq 1">></th>
             <td th:text="${entry.key}" th:rowspan="${entry.value.size()}" th:if="${idx2.count} eq 1"></td>
-            <td th:rowspan="${entry.value.size()}" th:if="${idx2.count} eq 1">
-            </td>
+            <td th:rowspan="${entry.value.size()}" th:if="${idx2.count} eq 1" th:text="${#aggregates.sum(entry.value.![price])}"></td>
             <td th:text="${idx1.count}+'-'+${idx2.count}"></td>
             <td th:text="${info.name}"></td>
             <td th:text="${info.price}"></td>

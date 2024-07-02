@@ -155,6 +155,10 @@ let createReport=async function () {
     console.log(allData);
     await thymeleafPage("/createReport", allData).then(res => {
         $('#reportBlock').append(res);
+        const content = document.querySelector("#reportBlock").innerHTML;
+        const newPage = window.open("", "", "width=1000,height=500");
+        newPage.document.write(content);
+        newPage.print();
     })
 
 
