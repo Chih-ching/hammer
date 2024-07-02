@@ -9,10 +9,9 @@ import java.util.ArrayList;
 @Data
 @Getter
 @Setter
-public class HammerInfo {
+public class ProductInfo {
     private String name;
     private Integer price;
-    private ArrayList accountList;
-    private Boolean show;
     private String id;
+    private Integer num;
 }

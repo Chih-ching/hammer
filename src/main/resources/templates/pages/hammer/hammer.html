@@ -36,7 +36,7 @@
                                     <span class="flex-grow-1 ms-2">批次新增</span>
                                 </span>
                         </button>
-                        <button class="btn btn-outline-primary btn-load">
+                        <button class="btn btn-outline-primary btn-load" onclick="createReport()">
                                 <span class="d-flex align-items-center">
                                     <i class="ri-checkbox-circle-fill"></i>
                                     <span class="flex-grow-1 ms-2">產出報告</span>
@@ -47,6 +47,11 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="card">
+            <div class="card-body" id="reportBlock"></div>
+        </div>
+    </div>
 </div>
 
 <th:block layout:fragment="modal">
@@ -55,7 +60,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" >批次新增</h5>
+                    <h5 class="modal-title">批次新增</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -64,13 +69,16 @@
                             <div class="col-xxl-12">
                                 <div>
                                     <label for="acccountList" class="form-label">帳號清單</label>
-                                    <textarea type="text" class="form-control" rows="20" id="acccountList" placeholder="請輸入..."></textarea>
+                                    <textarea type="text" class="form-control" rows="20" id="acccountList"
+                                              placeholder="請輸入..."></textarea>
                                 </div>
                             </div><!--end col-->
                             <div class="col-lg-12">
                                 <div class="hstack gap-2 justify-content-end">
                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" onclick="batchAddModalSubmit()">Submit</button>
+                                    <button type="submit" class="btn btn-primary" onclick="batchAddModalSubmit()">
+                                        Submit
+                                    </button>
                                 </div>
                             </div><!--end col-->
                         </div><!--end row-->
@@ -93,14 +101,17 @@
                             <div class="col-xxl-12">
                                 <div>
                                     <label for="quickAddContent" class="form-label">帳號清單</label>
-<!--                                    <div><span id='quickAddErrorMsg' class="badge bg-danger-subtle text-danger"></span></div>-->
-                                    <textarea type="text" class="form-control" rows="20" id="quickAddContent" placeholder="請輸入..."></textarea>
+                                    <!--                                    <div><span id='quickAddErrorMsg' class="badge bg-danger-subtle text-danger"></span></div>-->
+                                    <textarea type="text" class="form-control" rows="20" id="quickAddContent"
+                                              placeholder="請輸入..."></textarea>
                                 </div>
                             </div><!--end col-->
                             <div class="col-lg-12">
                                 <div class="hstack gap-2 justify-content-end">
                                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary" onclick="quickAddModalSubmit()">Submit</button>
+                                    <button type="submit" class="btn btn-primary" onclick="quickAddModalSubmit()">
+                                        Submit
+                                    </button>
                                 </div>
                             </div><!--end col-->
                         </div><!--end row-->

@@ -140,7 +140,6 @@ let quickAddModalSubmit = function () {
             }
         });
         allData = allData.concat(modalDataArr);
-        console.log(allData);
         addHammerLists().then(res=>{
             $('#quickAddModal').modal('hide');
         }).catch(e => {
@@ -149,4 +148,14 @@ let quickAddModalSubmit = function () {
     } catch (e) {
         alert('解析錯誤！');
     }
+}
+
+let createReport=async function () {
+    updateAllData();
+    console.log(allData);
+    await thymeleafPage("/createReport", allData).then(res => {
+        $('#reportBlock').append(res);
+    })
+
+
 }

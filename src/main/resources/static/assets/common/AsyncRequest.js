@@ -1,11 +1,9 @@
 //POST請求
 let postAxios = async function (url, data, resCatch) {
     let responseData = null;
-    let reqData = {data: data, token: sessionStorage.getItem("token")}
-    console.log('postAxios_data', reqData);
     await axios({
         method: 'POST',
-        data: reqData,
+        data: data,
         url: url,
         contentType: 'application/json; charset=UTF-8',
     }).then(res => {
