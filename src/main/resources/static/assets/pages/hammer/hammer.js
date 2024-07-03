@@ -162,7 +162,7 @@ let createReport=async function () {
             "<link href=\"/assets/pages/hammer/report.css\" rel=\"stylesheet\" media=\"print\">" +
             "<title>列印清單</title>" +
             "</head>" +
-            "<body>" +
+            "<body style=\"background-color: white\">" +
             "<div class=\"card\">" +
             "<div class=\"card-body\">" +
             reportHtml +
