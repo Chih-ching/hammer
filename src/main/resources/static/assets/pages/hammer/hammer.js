@@ -154,12 +154,23 @@ let createReport=async function () {
     updateAllData();
     console.log(allData);
     await thymeleafPage("/createReport", allData).then(res => {
+        $('#reportBlock').empty();
         $('#reportBlock').append(res);
-        const content = document.querySelector("#reportBlock").innerHTML;
-        const newPage = window.open("", "", "width=1000,height=500");
+        let reportHtml = $('#reportBlock').html();
+        const content = "<head>\n" +
+            "<link href=\"/assets/css/bootstrap.min.css\" rel=\"stylesheet\" type=\"text/css\">" +
+            "<link href=\"/assets/pages/hammer/report.css\" rel=\"stylesheet\" media=\"print\">" +
+            "<title>列印清單</title>" +
+            "</head>" +
+            "<body>" +
+            "<div class=\"card\">" +
+            "<div class=\"card-body\">" +
+            reportHtml +
+            "</div>" +
+            "</div>" +
+            "</body>";
+        const newPage = window.open("", 'Print');
         newPage.document.write(content);
-        newPage.print();
+        // newPage.print();
     })
-
-
 }

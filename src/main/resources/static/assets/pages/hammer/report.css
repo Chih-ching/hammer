@@ -1,0 +1,11 @@
+@media print {
+    .noBreak {
+        break-inside: avoid;
+    }
+
+}
+
+@page {
+    size: A4 portrait;
+    margin:3cm;
+}
