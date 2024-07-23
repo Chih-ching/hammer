@@ -150,27 +150,32 @@ let quickAddModalSubmit = function () {
     }
 }
 
+// let createReport=async function () {
+//     someJSONdata = [
+//         {
+//             name: 'John Doe',
+//             email: 'john@doe.com',
+//             phone: '111-111-1111'
+//         },
+//         {
+//             name: 'Barry Allen',
+//             email: 'barry@flash.com',
+//             phone: '222-222-2222'
+//         },
+//         {
+//             name: 'Cool Dude',
+//             email: 'cool@dude.com',
+//             phone: '333-333-3333'
+//         }
+//     ]
+// }
+
 let createReport=async function () {
     updateAllData();
     console.log(allData);
     $('#reportBlock').empty();
     await thymeleafPage("/createReport", allData).then(res => {
         $('#reportBlock').append(res);
-        let reportHtml = $('#reportBlock').html();
-        const content = "<head>\n" +
-            "<link href=\"/assets/css/bootstrap.min.css\" rel=\"stylesheet\" type=\"text/css\">" +
-            "<link href=\"/assets/pages/hammer/report.css\" rel=\"stylesheet\" media=\"print\">" +
-            "<title>列印清單</title>" +
-            "</head>" +
-            "<body style=\"background-color: white\">" +
-            "<div class=\"card\">" +
-            "<div class=\"card-body\">" +
-            reportHtml +
-            "</div>" +
-            "</div>" +
-            "</body>";
-        const newPage = window.open("", 'Print');
-        newPage.document.write(content);
-        // newPage.print();
+        printJS({printable:'reportBlock',type:'html',scanStyles:false,css:["/assets/css/bootstrap.min.css"]});
     })
 }
