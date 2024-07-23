@@ -5,6 +5,7 @@ import com.hammer.dto.ProductInfo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -20,6 +21,7 @@ public class HammerService {
                 Integer price = hammer.getPrice();
                 ArrayList<String> accountArr = hammer.getAccountList();
                 for (String account : accountArr) {
+                    account=account.toLowerCase(Locale.ROOT);
                     if (reportMap.containsKey(account)) {
                         Boolean flag = false;
                         ArrayList<ProductInfo> productList = reportMap.get(account);

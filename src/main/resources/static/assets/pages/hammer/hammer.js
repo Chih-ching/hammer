@@ -98,9 +98,9 @@ let batchAddModalSubmit = function () {
     let id = '#' + batchAddTargetId;
     let tagArr = [];
     let accountList = $('#acccountList').val();
-    accountList.split(/\s+/).forEach(account => {
+    accountList.split(/\n+/).forEach(account => {
         if (account.trim() !== '') {
-            tagArr.push(account.trim());
+            tagArr.push(account.replace(" ","").trim());
         }
     })
     $(id).find('.tagBlock').empty();
@@ -127,7 +127,7 @@ let quickAddModalSubmit = function () {
                 let name = '';
                 let price = 0;
                 let tagArr = [];
-                infos.split(/\s+/).forEach((info, idx) => {
+                infos.split(/\n+/).forEach((info, idx) => {
                     if (idx == 0) name = info.trim();
                     if (idx == 1) {
                         if(!info.startsWith('$'))throw "Exception";
@@ -153,8 +153,8 @@ let quickAddModalSubmit = function () {
 let createReport=async function () {
     updateAllData();
     console.log(allData);
+    $('#reportBlock').empty();
     await thymeleafPage("/createReport", allData).then(res => {
-        $('#reportBlock').empty();
         $('#reportBlock').append(res);
         let reportHtml = $('#reportBlock').html();
         const content = "<head>\n" +
