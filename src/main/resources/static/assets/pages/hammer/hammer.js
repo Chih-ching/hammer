@@ -130,27 +130,28 @@ let quickAddModalSubmit = function () {
                 infos.split(/\n+/).forEach((info, idx) => {
                     if (idx == 0) name = info.trim();
                     if (idx == 1) {
-                        if (!info.startsWith('$')) {
+                        let priceStr=info.trim();
+                        if (!priceStr.startsWith('$')) {
                             parseErr(name);
                             flag = false;
                         }
-                        if (isNaN(Number(info.substr(1).trim()))) {
+                        if (isNaN(Number(priceStr.substr(1)))) {
                             parseErr(name);
                             flag = false;
                         }
-                        ;
-                        price = parseInt(info.substr(1).trim());
+                        price = parseInt(priceStr.substr(1));
                     }
                     if (idx > 1 && info.trim() != '') {
-                        if (info.trim().startsWith('$')) {
+                        let accountStr=info.trim();
+                        if (accountStr.startsWith('$')) {
                             parseErr(name);
                             flag = false;
                         }
-                        if (/[\u4E00-\u9FA5]+/g.test(info.trim())) {
-                            parseErr(info.trim());
+                        if (/[\u4E00-\u9FA5]+/g.test(accountStr)) {
+                            parseErr(accountStr);
                             flag = false;
                         }
-                        tagArr.push(info.trim())
+                        tagArr.push(accountStr)
                     }
                     ;
                 });
