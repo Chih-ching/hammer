@@ -100,7 +100,7 @@ let batchAddModalSubmit = function () {
     let accountList = $('#acccountList').val();
     accountList.split(/\n+/).forEach(account => {
         if (account.trim() !== '') {
-            tagArr.push(account.replace(" ","").trim());
+            tagArr.push(account.replace(" ", "").trim());
         }
     })
     $(id).find('.tagBlock').empty();
@@ -118,10 +118,10 @@ let quickAddHammerList = function () {
 }
 
 let quickAddModalSubmit = function () {
+    let flag = true;
     updateAllData();
     try {
         let modalDataArr = [];
-        if (!$('#quickAddContent').val().startsWith('#')) throw "Exception";
         $('#quickAddContent').val().split('#').forEach((infos, i) => {
             if (i > 0) {
                 let name = '';
@@ -130,32 +130,56 @@ let quickAddModalSubmit = function () {
                 infos.split(/\n+/).forEach((info, idx) => {
                     if (idx == 0) name = info.trim();
                     if (idx == 1) {
-                        if(!info.startsWith('$'))throw "Exception";
-                        if(isNaN(Number(info.substr(1).trim())))throw "Exception";
+                        if (!info.startsWith('$')) {
+                            parseErr(name);
+                            flag = false;
+                        }
+                        if (isNaN(Number(info.substr(1).trim()))) {
+                            parseErr(name);
+                            flag = false;
+                        }
+                        ;
                         price = parseInt(info.substr(1).trim());
                     }
-                    if (idx > 1 && info.trim() != '') tagArr.push(info.trim());
+                    if (idx > 1 && info.trim() != '') {
+                        if (info.trim().startsWith('$')) {
+                            parseErr(name);
+                            flag = false;
+                        }
+                        if (/[\u4E00-\u9FA5]+/g.test(info.trim())) {
+                            parseErr(info.trim());
+                            flag = false;
+                        }
+                        tagArr.push(info.trim())
+                    }
+                    ;
                 });
                 modalDataArr.push(new hammerModel(name, price, tagArr, true, 'hammer' + parseInt(allData.length + i)))
             }
         });
-        allData = allData.concat(modalDataArr);
-        addHammerLists().then(res=>{
-            $('#quickAddModal').modal('hide');
-        }).catch(e => {
-            alert('錯誤！');
-        });
+        if (flag) {
+            allData = allData.concat(modalDataArr);
+            addHammerLists().then(res => {
+                $('#quickAddModal').modal('hide');
+            }).catch(e => {
+                alert('錯誤！');
+            });
+        }
     } catch (e) {
         alert('解析錯誤！');
     }
 }
 
-let createReport=async function () {
+let parseErr = function (errMsg) {
+    alert('解析錯誤！ \n (#' + errMsg + ')');
+}
+
+let createReport = async function () {
     updateAllData();
     console.log(allData);
     $('#reportBlock').empty();
     await thymeleafPage("/createReport", allData).then(res => {
         $('#reportBlock').append(res);
-        printJS({printable:'reportBlock',type:'html',scanStyles:false,css:["/assets/css/bootstrap.min.css"]});
+        printJS({printable: 'reportBlock', type: 'html', scanStyles: false, css: ["/assets/css/bootstrap.min.css"]});
     })
 }
