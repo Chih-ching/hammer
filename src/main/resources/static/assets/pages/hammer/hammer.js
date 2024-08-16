@@ -91,10 +91,11 @@ function parseNum(info) {
     flag=false
     let num = null;
     try {
-        num = info.split(":")[1];
-        let pattern = /^\d+$/;
-        if (pattern.test(num)) {
-            num = parseInt(num);
+        const text = info.split(":")[1].replaceAll(" ","");
+        const regex = /^(.+?)(?:（.*)?$/;
+        const match = text.match(regex);
+        if (match) {
+            num=match[1].trim();
             flag=true;
         }
     } catch (e) {
