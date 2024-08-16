@@ -49,7 +49,7 @@ let quickAddModalSubmit = function () {
                     }
                     if (!flag || !name || !num || !price) {
                         flag = false;
-                        parseErr(lines[0],errMsg);
+                        parseErr(lines[0], errMsg);
                         break outerLoop;
                     }
                     modalDataArr.push(new hammerModel(name, num, price, tagArr))
@@ -67,11 +67,12 @@ let quickAddModalSubmit = function () {
             })
         }
     } catch (e) {
+        console.log(e);
         alert('解析錯誤！');
     }
 }
 
-let parseErr = function (errMsg1,errMsg2) {
+let parseErr = function (errMsg1, errMsg2) {
     alert('error:  #' + errMsg1 + ' \n' + errMsg2);
 }
 
@@ -88,18 +89,25 @@ function parseName(info) {
 
 function parseNum(info) {
     errMsg = '數量'
-    flag=false
+    flag = false
     let num = null;
     try {
-        const text = info.split(":")[1].replaceAll(" ","");
-        const regex = /^(.+?)(?:（.*)?$/;
-        const match = text.match(regex);
+        let text = info.split(":")[1].replaceAll(" ", "");
+        let match = text.match(/^(.+?)(?:（.*)?$/);
+        let result;
         if (match) {
-            num=match[1].trim();
+            result = match[1];
+        }else{
+            result = text;
+        }
+
+        const isAllDigits = /^\d+$/.test(result);
+        if(isAllDigits){
+            num=result;
             flag=true;
         }
     } catch (e) {
-        flag=false
+        flag = false
     }
     return num
 }
@@ -137,6 +145,12 @@ let createReport = async function () {
     $('#reportBlock').empty();
     await thymeleafPage("/createReport", modalDataArr).then(res => {
         $('#reportBlock').append(res);
-        printJS({printable: 'reportBlock', type: 'html', scanStyles: false, css: ["/assets/css/bootstrap.min.css"],documentTitle:''});
+        printJS({
+            printable: 'reportBlock',
+            type: 'html',
+            scanStyles: false,
+            css: ["/assets/css/bootstrap.min.css"],
+            documentTitle: ''
+        });
     })
 }
