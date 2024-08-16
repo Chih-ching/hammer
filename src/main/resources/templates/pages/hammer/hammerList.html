@@ -1,36 +1,29 @@
-<div class="col-xl-4 hammers"  th:each="hammer:${hammerList}" th:if="${hammer.show}">
-    <div class="card" th:id="${hammer.id}">
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <div class="flex-grow-1">
-                    <h6 class="card-title mb-0"></h6>
-                </div>
-                <div class="flex-shrink-0">
-                    <ul class="list-inline card-toolbar-menu d-flex align-items-center mb-0">
-                        <li class="list-inline-item">
-                            <button type="button" th:onclick="delList([[${hammer.id}]])"
-                                    class="btn-close fs-10 align-middle"></button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="card-body collapse show" >
-            <div>
-                <label class="form-label">名稱</label>
-                <input type="text" class="form-control nameInput" th:value="${hammer.name}">
-            </div>
-            <div class="mt-3">
-                <label class="form-label">價格</label>
-                <input type="number" class="form-control priceInput" th:value="${hammer.price}">
-            </div>
-            <div class="mt-3 accountDiv">
-                <label class="form-label">帳號</label>
-                <span class="badge rounded-pill bg-light-subtle text-body">0</span>
-                <div class="tagBlock"><input type="text" class="form-control tagInput" disabled></div>
-            </div>
-            <div class="mt-1">
-                <span class="badge bg-light text-body" th:onclick="batchAdd([[${hammer.id}]])">編輯標籤</span>
+<div class="col-xl-12 hammers">
+    <div class="card">
+        <div class="d-flex align-items-center m-4">
+            <div class="table-responsive table-card">
+                <table class="table ">
+                    <thead class="table-light">
+                    <tr>
+                        <th scope="col" style="vertical-align:middle;text-align:center;white-space: nowrap">#</th>
+                        <th scope="col" style="vertical-align:middle;text-align:center;white-space: nowrap">商品</th>
+                        <th scope="col" style="vertical-align:middle;text-align:center;white-space: nowrap">價格</th>
+                        <th scope="col" style="vertical-align:middle;text-align:center;white-space: nowrap">數量</th>
+                        <th scope="col" style="vertical-align:middle;text-align:center;width: 60%">帳號</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="info,idx : ${hammerList}">
+                        <td class="fw-semibold" style="margin-left:15px;margin-right:10px;vertical-align:middle;text-align:center;white-space: nowrap" th:text="${idx.count}"></td>
+                        <td style="vertical-align:middle;text-align:center;white-space: nowrap" th:text="${info.name}"></td>
+                        <td style="vertical-align:middle;text-align:center;white-space: nowrap" th:text="'$'+${info.price}"></td>
+                        <td style="vertical-align:middle;text-align:center;white-space: nowrap" th:text="${info.num}"></td>
+                        <td>
+                            <span class="badge bg-primary"  style="margin-right:3px;" th:each="account,i:${info.accountList}" th:text="${account}"></span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

@@ -2,185 +2,140 @@ $(document).ready(async function () {
 })
 
 
-function hammerModel(name, price, accountList, show, id) {
+function hammerModel(name, num, price, accountList) {
     this.name = name;
+    this.num = num;
     this.price = price;
     this.accountList = accountList;
-    this.show = show;
-    this.id = id;
-}
-
-let allData = [];
-let addHammerButton = function () {
-    addHammerList([new hammerModel("", 0, [], true, 'hammer' + parseInt(allData.length + 1))])
-        .then(r => {
-        })
-        .catch(e => {
-            alert("error")
-        });
-}
-let addHammerList = async function (dataArr) {//單筆
-    allData = allData.concat(dataArr);
-    await thymeleafPage("/hammerList", dataArr).then(res => {
-        $('#hammersInfo').append(res);
-        $('.hammers').last().find('.card-title').text('# ' + $(".hammers").length);
-        $('#cardNum').text($(".hammers").length);
-    })
-
-}
-
-let updateAllData = function () {
-    let hammerNum = $(".hammers").length;
-    if (hammerNum > 0) {
-        for (let i = 0; i < hammerNum; i++) {
-            let name = $('.hammers').eq(i).find('.nameInput').val();
-            let price = $('.hammers').eq(i).find('.priceInput').val();
-            let tagArr = [];
-            $('.hammers').eq(i).find('.choices__item--selectable').each(function () {
-                tagArr.push($(this).attr('data-value'));
-            });
-            allData.forEach(data => {
-                if (data.id === $('.hammers').eq(i).find('.card').attr('id')) {
-                    data.name = name
-                    data.price = price
-                    data.accountList = tagArr;
-                }
-            })
-        }
-    }
-}
-
-let delList = async function (id) {
-    updateAllData();
-    allData.forEach(data => {
-        if (data.id === id) {
-            data.show = false;
-        }
-    })
-    addHammerLists();
-
-}
-let addHammerLists = async function () { //多筆
-    $('#hammersInfo').empty(); //清空所有清單
-    await thymeleafPage("/hammerList", allData).then(res => {
-        $('#hammersInfo').append(res);
-        for (let i = 0; i < $(".hammers").length; i++) {
-            let element = $('.hammers').eq(i).find('.card');
-            element.find('.card-title').text('# ' + [i + 1]);
-            let target = allData.filter(data => {
-                return data.id === element.attr('id')
-            });
-            new Choices($('.tagInput')[i], {}).setValue(target[0].accountList).disable();
-            element.find('.accountDiv .badge').text(target[0].accountList.length);
-        }
-    }).finally(() => {
-        $('#cardNum').text($(".hammers").length);
-    })
-}
-
-let batchAddTargetId = '';
-let batchAdd = function (id) {
-    updateAllData();
-    let tagArr = [];
-    allData.forEach(data => {
-        if (data.id === id) {
-            tagArr = data.accountList;
-        }
-    });
-    let tagWord = tagArr.join("\n");
-    $('#acccountList').val(tagWord);
-    $('#batchAddModal').modal({backdrop: 'static', keyboard: false});
-    $('#batchAddModal').modal('show');
-    batchAddTargetId = id;
-}
-
-let batchAddModalSubmit = function () {
-    let id = '#' + batchAddTargetId;
-    let tagArr = [];
-    let accountList = $('#acccountList').val();
-    accountList.split(/\n+/).forEach(account => {
-        if (account.trim() !== '') {
-            tagArr.push(account.replace(" ", "").trim());
-        }
-    })
-    $(id).find('.tagBlock').empty();
-    $(id).find('.tagBlock').append('<input type="text" class="form-control tagInput">');
-    new Choices($(id).find('.tagInput')[0], {}).setValue(tagArr).disable();
-    $(id).find('.accountDiv .badge').text(tagArr.length);
-    $('#batchAddModal').modal('hide');
-
 }
 
 let quickAddHammerList = function () {
-    $('#quickAddContent').val('');
     $('#quickAddModal').modal({backdrop: 'static', keyboard: false});
     $('#quickAddModal').modal('show');
 }
 
+let flag = true;
+let errMsg = '';
+let modalDataArr = [];
 let quickAddModalSubmit = function () {
-    let flag = true;
-    updateAllData();
+    flag = true;
     try {
-        let modalDataArr = [];
-        $('#quickAddContent').val().split('#').forEach((infos, i) => {
-            if (i > 0) {
-                let name = '';
-                let price = 0;
-                let tagArr = [];
-                infos.split(/\n+/).forEach((info, idx) => {
-                    if (idx == 0) name = info.trim();
-                    if (idx == 1) {
-                        let priceStr=info.trim();
-                        if (!priceStr.startsWith('$')) {
-                            parseErr(name);
-                            flag = false;
+        modalDataArr = [];
+        let products = $('#quickAddContent').val().split('#');
+        outerLoop:
+            for (let i = 0; i < products.length; i++) {
+                let product = products[i];
+                if (i > 0) {
+                    let name = null;
+                    let num = null;
+                    let price = null;
+                    let tagArr = [];
+                    errMsg = null;
+                    let lines = product.split(/\n+/);
+                    for (let idx = 0; idx < lines.length; idx++) {
+                        let line = lines[idx].trim();
+                        if (idx == 0 && flag) {
+                            name = parseName(line);
                         }
-                        if (isNaN(Number(priceStr.substr(1)))) {
-                            parseErr(name);
-                            flag = false;
+                        if (idx == 0 && flag) {
+                            num = parseNum(line);
                         }
-                        price = parseInt(priceStr.substr(1));
+                        if (idx == 1 && flag) {
+                            price = parsePrice(line);
+                        }
+                        if (idx > 1 && line != '' && flag && tagArr.length < num) {
+                            tagArr.push(parseAccount(line));
+                        }
                     }
-                    if (idx > 1 && info.trim() != '') {
-                        let accountStr=info.trim();
-                        if (accountStr.startsWith('$')) {
-                            parseErr(name);
-                            flag = false;
-                        }
-                        if (/[\u4E00-\u9FA5]+/g.test(accountStr)) {
-                            parseErr(accountStr);
-                            flag = false;
-                        }
-                        tagArr.push(accountStr)
+                    if (!flag || !name || !num || !price) {
+                        flag = false;
+                        parseErr(lines[0],errMsg);
+                        break outerLoop;
                     }
-                    ;
-                });
-                modalDataArr.push(new hammerModel(name, price, tagArr, true, 'hammer' + parseInt(allData.length + i)))
+                    modalDataArr.push(new hammerModel(name, num, price, tagArr))
+                }
             }
-        });
+        console.log("flag=" + flag);
         if (flag) {
-            allData = allData.concat(modalDataArr);
-            addHammerLists().then(res => {
+            thymeleafPage("/hammerList", modalDataArr).then(res => {
+                $('#hammersInfo').empty();
+                $('#hammersInfo').append(res);
+                $('#cardNum').text($('tbody tr').length);
                 $('#quickAddModal').modal('hide');
             }).catch(e => {
-                alert('錯誤！');
-            });
+                alert('解析錯誤！');
+            })
         }
     } catch (e) {
         alert('解析錯誤！');
     }
 }
 
-let parseErr = function (errMsg) {
-    alert('解析錯誤！ \n (#' + errMsg + ')');
+let parseErr = function (errMsg1,errMsg2) {
+    alert('error:  #' + errMsg1 + ' \n' + errMsg2);
+}
+
+function parseName(info) {
+    errMsg = '商品名稱'
+    let name = null;
+    try {
+        name = info.split(":")[0];
+    } catch (e) {
+        flag = false;
+    }
+    return name
+}
+
+function parseNum(info) {
+    errMsg = '數量'
+    flag=false
+    let num = null;
+    try {
+        num = info.split(":")[1];
+        let pattern = /^\d+$/;
+        if (pattern.test(num)) {
+            num = parseInt(num);
+            flag=true;
+        }
+    } catch (e) {
+        flag=false
+    }
+    return num
+}
+
+function parsePrice(info) {
+    errMsg = '價格'
+    let price = null;
+    try {
+        if (!info.startsWith('$')) {
+            flag = false;
+        }
+        if (isNaN(Number(info.substr(1)))) {
+            flag = false;
+        }
+        price = parseInt(info.substr(1));
+    } catch (e) {
+        flag = false;
+    }
+    return price
+}
+
+function parseAccount(info) {
+    errMsg = '帳號'
+    if (info.startsWith('$')) {
+        flag = false;
+    }
+    //if(有中文字)
+    if (/[\u4E00-\u9FA5]+/g.test(info)) {
+        flag = false;
+    }
+    return info;
 }
 
 let createReport = async function () {
-    updateAllData();
-    console.log(allData);
     $('#reportBlock').empty();
-    await thymeleafPage("/createReport", allData).then(res => {
+    await thymeleafPage("/createReport", modalDataArr).then(res => {
         $('#reportBlock').append(res);
-        printJS({printable: 'reportBlock', type: 'html', scanStyles: false, css: ["/assets/css/bootstrap.min.css"]});
+        printJS({printable: 'reportBlock', type: 'html', scanStyles: false, css: ["/assets/css/bootstrap.min.css"],documentTitle:''});
     })
 }

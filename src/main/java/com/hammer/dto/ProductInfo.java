@@ -12,6 +12,5 @@ import java.util.ArrayList;
 public class ProductInfo {
     private String name;
     private Integer price;
-    private String id;
-    private Integer num;
+    private Integer num; //該帳號買了多少件衣服
 }
