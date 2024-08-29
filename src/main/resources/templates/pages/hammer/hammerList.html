@@ -15,7 +15,7 @@
                     <tbody>
                     <tr th:each="info,idx : ${hammerList}">
                         <td class="fw-semibold" style="margin-left:15px;margin-right:10px;vertical-align:middle;text-align:center;white-space: nowrap" th:text="${idx.count}"></td>
-                        <td style="vertical-align:middle;text-align:center;white-space: nowrap" th:text="${info.name}"></td>
+                        <td style="vertical-align:middle;white-space: nowrap" th:text="${info.name}"></td>
                         <td style="vertical-align:middle;text-align:center;white-space: nowrap" th:text="'$'+${info.price}"></td>
                         <td style="vertical-align:middle;text-align:center;white-space: nowrap" th:text="${info.num}"></td>
                         <td>

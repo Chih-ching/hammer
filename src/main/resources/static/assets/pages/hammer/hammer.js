@@ -80,7 +80,7 @@ function parseName(info) {
     errMsg = '商品名稱'
     let name = null;
     try {
-        name = info.split(":")[0];
+        name = info.replaceAll('：', ':');
     } catch (e) {
         flag = false;
     }
@@ -92,7 +92,9 @@ function parseNum(info) {
     flag = false
     let num = null;
     try {
+        info=info.replaceAll('：', ':');;
         let text = info.split(":")[1].replaceAll(" ", "");
+        text=text.replace('：', ':');
         let match = text.match(/^(.+?)(?:（.*)?$/);
         let result;
         if (match) {
