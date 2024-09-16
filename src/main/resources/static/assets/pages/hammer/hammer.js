@@ -80,11 +80,7 @@ function parseName(info) {
     errMsg = '商品名稱'
     let name = null;
     try {
-        let infoSplit=info.replaceAll('：', ':').split(":");
-        name=infoSplit[0];
-        if (infoSplit[1].indexOf("（")>0){
-            name=name+"（"+infoSplit[1].split("（")[1];
-        }
+        name=info.replaceAll('：', ':');
     } catch (e) {
         flag = false;
     }
@@ -96,7 +92,7 @@ function parseNum(info) {
     flag = false
     let num = null;
     try {
-        info=info.replaceAll('：', ':');;
+        info=info.replaceAll('：', ':');
         let text = info.split(":")[1].replaceAll(" ", "");
         text=text.replace('：', ':');
         let match = text.match(/^(.+?)(?:（.*)?$/);
