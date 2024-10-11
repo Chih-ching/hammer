@@ -94,7 +94,9 @@ function parseNum(info) {
     try {
         info=info.replaceAll('：', ':');
         let text = info.split(":")[1].replaceAll(" ", "");
-        text=text.replace('：', ':').replaceAll('（','(').replaceAll('）',')');
+        text=text.replaceAll('：', ':');
+        text=text.replaceAll('（','(');
+        text=text.replaceAll('）',')');
         let match = text.match(/(\d+)/);
         let result;
         if (match) {
