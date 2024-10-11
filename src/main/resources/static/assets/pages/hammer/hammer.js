@@ -95,14 +95,14 @@ function parseNum(info) {
         info=info.replaceAll('：', ':');
         let text = info.split(":")[1].replaceAll(" ", "");
         text=text.replace('：', ':');
-        let match = text.match(/^(.+?)(?:（.*)?$/);
+        let match = text.match(/(\d+)/);
         let result;
         if (match) {
             result = match[1];
         }else{
             result = text;
         }
-
+console.log(result);
         const isAllDigits = /^\d+$/.test(result);
         if(isAllDigits){
             num=result;
@@ -155,4 +155,12 @@ let createReport = async function () {
             documentTitle: ''
         });
     })
+}
+
+function onSignIn(googleUser) {
+    let profile = googleUser.getBasicProfile();
+    console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+    console.log('Name: ' + profile.getName());
+    console.log('Image URL: ' + profile.getImageUrl());
+    console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
 }
