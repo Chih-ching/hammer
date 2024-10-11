@@ -94,7 +94,7 @@ function parseNum(info) {
     try {
         info=info.replaceAll('：', ':');
         let text = info.split(":")[1].replaceAll(" ", "");
-        text=text.replace('：', ':');
+        text=text.replace('：', ':').replaceAll('（','(').replaceAll('）',')');
         let match = text.match(/(\d+)/);
         let result;
         if (match) {
@@ -102,7 +102,6 @@ function parseNum(info) {
         }else{
             result = text;
         }
-console.log(result);
         const isAllDigits = /^\d+$/.test(result);
         if(isAllDigits){
             num=result;
